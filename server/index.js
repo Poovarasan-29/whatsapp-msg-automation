@@ -5,12 +5,10 @@ import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  // ✅ DEPLOYMENT CHANGE: Restrict CORS to your frontend's domain
-  cors: { origin: "https://whatsapp-msg-automation.vercel.app" }, // <-- IMPORTANT: Change this to your live frontend URL
+  cors: { origin: "https://whatsapp-msg-automation.vercel.app" },
 });
 
 app.use(express.json());
@@ -18,11 +16,8 @@ app.use(cors());
 
 const client = new Client({
   authStrategy: new LocalAuth({ clientId: "my-whatsapp-session" }),
-  // ✅ DEPLOYMENT CHANGE: Server-friendly Puppeteer configuration
   puppeteer: {
     headless: true,
-    // On most servers, you don't need to specify a path if Chrome/Chromium is installed correctly.
-    // These args are often necessary for server environments.
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   },
 });
@@ -32,6 +27,12 @@ let isClientReady = false;
 client.on("qr", (qr) => {
   console.log("📲 QR generated, sending to frontend...");
   io.emit("qr", qr);
+});
+
+// ✅ NEW: Event to notify frontend when QR is scanned and authenticated
+client.on("authenticated", () => {
+  console.log("✅ Client authenticated!");
+  io.emit("authenticated");
 });
 
 client.on("ready", () => {
@@ -60,10 +61,10 @@ app.post("/send-message", async (req, res) => {
   }
 });
 
-// ✅ DEPLOYMENT CHANGE: Use port from environment variables for hosting
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
 client.initialize();
+
