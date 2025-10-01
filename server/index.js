@@ -5,11 +5,12 @@ import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   // ✅ DEPLOYMENT CHANGE: Restrict CORS to your frontend's domain
-  cors: { origin: "https://your-frontend-domain.com" }, // <-- IMPORTANT: Change this to your live frontend URL
+  cors: { origin: "https://whatsapp-msg-automation.vercel.app" }, // <-- IMPORTANT: Change this to your live frontend URL
 });
 
 app.use(express.json());
