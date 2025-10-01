@@ -1,0 +1,37 @@
+Node.js dependencies
+node_modules/
+
+Logs
+logs
+.log
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+Environment variables
+.env
+.env.*
+!.env.example
+
+WhatsApp Web JS session data (VERY IMPORTANT)
+.wwebjs_auth/
+.wwebjs_cache/
+.txt
+
+Production build folders
+dist/
+build/
+.vite/
+
+macOS specific
+.DS_Store
+
+IDE and editor directories
+.idea/
+.vscode/
+*.suo
+.ntvs
+*.njsproj
+*.sln
+*.sw?
